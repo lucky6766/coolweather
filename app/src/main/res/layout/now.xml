@@ -12,7 +12,7 @@
         android:id="@+id/degree_text"
         android:layout_gravity="end"
         android:textColor="#fff"
-        android:textSize="15dp" />
+        android:textSize="60sp" />
 
     <TextView
         android:layout_width="wrap_content"
