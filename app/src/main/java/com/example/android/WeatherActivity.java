@@ -5,6 +5,7 @@ import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Build;
@@ -23,6 +24,7 @@ import com.bumptech.glide.Glide;
 import com.example.android.db.Province;
 import com.example.android.gson.Forecast;
 import com.example.android.gson.Weather;
+import com.example.android.service.AutoUpdataService;
 import com.example.android.util.HttpUtil;
 import com.example.android.util.Utility;
 
@@ -95,7 +97,6 @@ public class WeatherActivity extends AppCompatActivity {
         } else {
             //无缓存时去服务器查询天气
             mWeatherId = getIntent().getStringExtra("weather_id");
-//            String weatherId = getIntent().getStringExtra("weather_id");
             weatherLayout.setVisibility(View.INVISIBLE);
             requestWeather(mWeatherId);
         }
@@ -165,6 +166,7 @@ public class WeatherActivity extends AppCompatActivity {
             public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
                 final String bingPic = response.body().string();
                 SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences(WeatherActivity.this).edit();
+                editor.putString("bing_pic", bingPic);
                 editor.apply();
                 runOnUiThread(new Runnable() {
                     @Override
@@ -210,5 +212,7 @@ public class WeatherActivity extends AppCompatActivity {
         carWashText.setText(carWash);
         sportText.setText(sport);
         weatherLayout.setVisibility(View.VISIBLE);
+        Intent intent = new Intent(this, AutoUpdataService.class);
+        startService(intent);
     }
 }
